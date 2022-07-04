@@ -1,0 +1,61 @@
+# App List
+
+type ServerAppList {
+    id: Int!
+    title: String
+    description: String
+    tagline: String
+    tags: [String]
+    icon: String
+    # @todo: add more fields
+}
+
+type AppListData {
+    recommend: [ServerAppList]
+    list: [ServerAppList]
+    community: [ServerAppList]
+}
+
+input AppListInput {
+    index: Int
+    size: Int
+    t: String
+    categoryId: Int
+    key: String
+}
+
+type AppListOutput {
+    success: Int
+    message: String
+    data: AppListData
+}
+
+# Port
+input PortInput {
+    type: String
+}
+
+type PortOutput {
+    p: Int
+}
+
+input PortCheckInput {
+    type: String
+    port: Int
+}
+
+type PortCheckOutput {
+    success: Int
+    message: String
+    data: Boolean
+}
+
+"Queries for Apps"
+type Query {
+
+    "App List"
+    appList(input: AppListInput!): AppListOutput
+
+    "Port"
+    getPort(input: PortInput!): PortOutput
+}
