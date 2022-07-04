@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	graph_generated "github.com/IceWhaleTech/CasaOS/graph/generated"
+	graph "github.com/IceWhaleTech/CasaOS/graph/resolver"
 	"github.com/IceWhaleTech/CasaOS/model/notify"
 	"github.com/IceWhaleTech/CasaOS/pkg/cache"
 	"github.com/IceWhaleTech/CasaOS/pkg/config"
@@ -18,6 +20,9 @@ import (
 
 	"github.com/robfig/cron"
 	"gorm.io/gorm"
+
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 )
 
 var sqliteDB *gorm.DB
@@ -146,6 +151,11 @@ func main() {
 		WriteTimeout:   60 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
+
+	srv := handler.NewDefaultServer(graph_generated.NewExecutableSchema(graph_generated.Config{Resolvers: &graph.Resolver{}}))
+
+	http.Handle("/playground", playground.Handler("GraphQL playground", "/query"))
+	http.Handle("/query", srv)
 
 	s.ListenAndServe()
 
