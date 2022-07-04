@@ -37,3 +37,6 @@ __debug_bin
 main
 CasaOS
 github.com
+
+# graphql generated files
+graph/generated/
