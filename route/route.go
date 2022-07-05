@@ -3,6 +3,8 @@ package route
 import (
 	"net/http"
 
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/IceWhaleTech/CasaOS/middleware"
 	"github.com/IceWhaleTech/CasaOS/pkg/config"
 	jwt2 "github.com/IceWhaleTech/CasaOS/pkg/utils/jwt"
@@ -11,9 +13,32 @@ import (
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+
+	graph_generated "github.com/IceWhaleTech/CasaOS/graph/generated"
+	graph_resolver "github.com/IceWhaleTech/CasaOS/graph/resolver"
 )
 
 var OnlineDemo bool = false
+
+// Defining the Graphql handler
+func graphqlHandler() gin.HandlerFunc {
+	// NewExecutableSchema and Config are in the generated.go file
+	// Resolver is in the resolver.go file
+	h := handler.NewDefaultServer(graph_generated.NewExecutableSchema(graph_generated.Config{Resolvers: &graph_resolver.Resolver{}}))
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
+
+// Defining the Playground handler
+func playgroundHandler() gin.HandlerFunc {
+	h := playground.Handler("GraphQL", "/query")
+
+	return func(c *gin.Context) {
+		h.ServeHTTP(c.Writer, c.Request)
+	}
+}
 
 func InitRouter() *gin.Engine {
 
@@ -30,6 +55,9 @@ func InitRouter() *gin.Engine {
 	//r.GET("/", func(c *gin.Context) {
 	//	c.Redirect(http.StatusMovedPermanently, "ui/")
 	//})
+
+	r.POST("/query", graphqlHandler())
+	r.GET("/play", playgroundHandler())
 
 	r.POST("/v1/user/register/:key", v1.PostUserRegister)
 	r.POST("/v1/user/login", v1.PostUserLogin) //
