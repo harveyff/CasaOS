@@ -1,0 +1,49 @@
+# User
+
+type SetNamePwdOutput {
+  success: Int
+  message: String
+}
+
+type User {
+    id: ID
+    username: String
+    password: String
+    role: String
+    email: String
+    nickname: String
+    avatar: String
+    description: String
+}
+
+type UserLoginData {
+    token: String
+    version: String
+    user: User
+}
+
+type UserLoginOutput {
+    success: Int
+    message: String
+    data: UserLoginData
+}
+
+type GetUserInfoOutput {
+    success: Int
+    message: String
+    data: User
+}
+
+type Mutation {
+
+    "set username and password"
+    setNamePwd(username: String!, pwd: String!): SetNamePwdOutput
+
+    "user login"
+    userLogin(username: String!, pwd: String!): UserLoginOutput
+}
+
+type Query {
+    "get user info"
+    getUserInfo(id: ID!): GetUserInfoOutput
+}
