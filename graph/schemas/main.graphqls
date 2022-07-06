@@ -1,0 +1,7 @@
+type Mutation {
+    pong: Boolean
+}
+
+type Query {
+    ping: Boolean
+}

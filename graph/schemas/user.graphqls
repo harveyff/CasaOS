@@ -34,7 +34,7 @@ type GetUserInfoOutput {
     data: User
 }
 
-type Mutation {
+extend type Mutation {
 
     "set username and password"
     setNamePwd(username: String!, pwd: String!): SetNamePwdOutput
@@ -43,7 +43,7 @@ type Mutation {
     userLogin(username: String!, pwd: String!): UserLoginOutput
 }
 
-type Query {
+extend type Query {
     "get user info"
     getUserInfo(id: ID!): GetUserInfoOutput
 }

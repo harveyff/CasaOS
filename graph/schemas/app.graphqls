@@ -50,8 +50,7 @@ type PortCheckOutput {
     data: Boolean
 }
 
-"Queries for Apps"
-type Query {
+extend type Query {
 
     "App List"
     appList(input: AppListInput!): AppListOutput

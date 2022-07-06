@@ -7,7 +7,6 @@ import (
 	"context"
 	"fmt"
 
-	graph_generated "github.com/IceWhaleTech/CasaOS/graph/generated"
 	graph_generated_model "github.com/IceWhaleTech/CasaOS/graph/generated/model"
 )
 
@@ -20,8 +19,3 @@ func (r *queryResolver) AppList(ctx context.Context, input graph_generated_model
 func (r *queryResolver) GetPort(ctx context.Context, input graph_generated_model.PortInput) (*graph_generated_model.PortOutput, error) {
 	panic(fmt.Errorf("not implemented"))
 }
-
-// Query returns graph_generated.QueryResolver implementation.
-func (r *Resolver) Query() graph_generated.QueryResolver { return &queryResolver{r} }
-
-type queryResolver struct{ *Resolver }
