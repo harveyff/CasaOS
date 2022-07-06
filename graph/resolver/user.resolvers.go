@@ -12,6 +12,9 @@ import (
 
 // SetNamePwd is the resolver for the setNamePwd field.
 func (r *mutationResolver) SetNamePwd(ctx context.Context, username string, pwd string) (*graph_generated_model.SetNamePwdOutput, error) {
+	
+	
+	
 	panic(fmt.Errorf("not implemented"))
 }
 
