@@ -2,7 +2,7 @@
  * @Author: LinkLeong link@icewhale.com
  * @Date: 2021-10-08 10:29:08
  * @LastEditors: LinkLeong
- * @LastEditTime: 2022-06-21 15:10:03
+ * @LastEditTime: 2022-07-06 11:14:41
  * @FilePath: /CasaOS/middleware/gin.go
  * @Description:
  * @Website: https://www.casaos.io
@@ -34,6 +34,7 @@ func Cors() gin.HandlerFunc {
 		c.Header("Access-Control-Max-Age", "172800")
 		c.Header("Access-Control-Allow-Credentials", "true")
 		c.Set("content-type", "application/json")
+
 		//}
 
 		//允许类型校验

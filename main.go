@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	graph_generated "github.com/IceWhaleTech/CasaOS/graph/generated"
-	graph "github.com/IceWhaleTech/CasaOS/graph/resolver"
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/IceWhaleTech/CasaOS/model/notify"
 	"github.com/IceWhaleTech/CasaOS/pkg/cache"
 	"github.com/IceWhaleTech/CasaOS/pkg/config"
@@ -17,12 +17,13 @@ import (
 	"github.com/IceWhaleTech/CasaOS/pkg/utils/random"
 	"github.com/IceWhaleTech/CasaOS/route"
 	"github.com/IceWhaleTech/CasaOS/service"
+	"github.com/go-chi/chi"
+	"github.com/rs/cors"
 
+	graph_generated "github.com/IceWhaleTech/CasaOS/graph/generated"
+	graph_resolver "github.com/IceWhaleTech/CasaOS/graph/resolver"
 	"github.com/robfig/cron"
 	"gorm.io/gorm"
-
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/playground"
 )
 
 var sqliteDB *gorm.DB
@@ -144,6 +145,24 @@ func main() {
 	}
 	cron2.Start()
 	defer cron2.Stop()
+	go func() {
+		router := chi.NewRouter()
+		router.Use(cors.New(cors.Options{
+			AllowedOrigins:   []string{"http://localhost:8080"},
+			AllowCredentials: true,
+			Debug:            true,
+		}).Handler)
+		h := handler.NewDefaultServer(graph_generated.NewExecutableSchema(graph_generated.Config{Resolvers: &graph_resolver.Resolver{}}))
+		h1 := playground.Handler("GraphQL", "/query")
+		router.Handle("/play", h1)
+		router.Handle("/query", h)
+
+		http.ListenAndServe(":8090", router)
+		if err != nil {
+			panic(err)
+		}
+	}()
+
 	s := &http.Server{
 		Addr:           fmt.Sprintf(":%v", config.ServerInfo.HttpPort),
 		Handler:        r,
@@ -152,10 +171,10 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	srv := handler.NewDefaultServer(graph_generated.NewExecutableSchema(graph_generated.Config{Resolvers: &graph.Resolver{}}))
+	// srv := handler.NewDefaultServer(graph_generated.NewExecutableSchema(graph_generated.Config{Resolvers: &graph.Resolver{}}))
 
-	http.Handle("/playground", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	// http.Handle("/playground", playground.Handler("GraphQL playground", "/query"))
+	// http.Handle("/query", srv)
 
 	s.ListenAndServe()
 

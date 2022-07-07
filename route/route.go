@@ -45,6 +45,7 @@ func InitRouter() *gin.Engine {
 	r := gin.Default()
 
 	r.Use(middleware.Cors())
+
 	r.Use(middleware.WriteLog())
 	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	gin.SetMode(config.ServerInfo.RunMode)
@@ -55,9 +56,6 @@ func InitRouter() *gin.Engine {
 	//r.GET("/", func(c *gin.Context) {
 	//	c.Redirect(http.StatusMovedPermanently, "ui/")
 	//})
-
-	r.POST("/query", graphqlHandler())
-	r.GET("/play", playgroundHandler())
 
 	r.POST("/v1/user/register/:key", v1.PostUserRegister)
 	r.POST("/v1/user/login", v1.PostUserLogin) //

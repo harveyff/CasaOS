@@ -22,6 +22,7 @@ require (
 	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
 	github.com/gin-contrib/gzip v0.0.2
 	github.com/gin-gonic/gin v1.7.2
+	github.com/go-chi/chi v1.5.4
 	github.com/go-ini/ini v1.62.0
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/go-playground/validator/v10 v10.6.1 // indirect
@@ -50,6 +51,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/robfig/cron v1.2.0
+	github.com/rs/cors v1.8.2
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil/v3 v3.21.5
 	github.com/sirupsen/logrus v1.8.1
