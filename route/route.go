@@ -3,13 +3,10 @@
 package route
 
 import (
-	"net/http"
-
 	"github.com/IceWhaleTech/CasaOS/middleware"
 	"github.com/IceWhaleTech/CasaOS/pkg/config"
 	jwt2 "github.com/IceWhaleTech/CasaOS/pkg/utils/jwt"
 	v1 "github.com/IceWhaleTech/CasaOS/route/v1"
-	"github.com/IceWhaleTech/CasaOS/web"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
@@ -25,15 +22,6 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.WriteLog())
 	r.Use(gzip.Gzip(gzip.DefaultCompression))
 	gin.SetMode(config.ServerInfo.RunMode)
-
-	// @tiger - 为了方便未来的模块化迭代，前端输出需要独立端口，不要和 API 端口公用。
-	r.StaticFS("/ui", http.FS(web.Static))
-	r.GET("/", WebUIHome)
-	// r.StaticFS("/assets", http.Dir("./static/assets"))
-	// r.StaticFile("/favicon.ico", "./static/favicon.ico")
-	//r.GET("/", func(c *gin.Context) {
-	//	c.Redirect(http.StatusMovedPermanently, "ui/")
-	//})
 
 	r.POST("/v1/user/register/:key", v1.PostUserRegister)
 	r.POST("/v1/user/login", v1.PostUserLogin) //
