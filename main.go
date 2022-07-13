@@ -53,6 +53,13 @@ func init() {
 
 }
 
+// 返回一个支持至 秒 级别的 cron
+func newWithSeconds() *cron.Cron {
+	secondParser := cron.NewParser(cron.Second | cron.Minute |
+		cron.Hour | cron.Dom | cron.Month | cron.DowOptional | cron.Descriptor)
+	return cron.New(cron.WithParser(secondParser), cron.WithChain())
+}
+
 // @title casaOS API
 // @version 1.0.0
 // @contact.name lauren.pan
@@ -108,7 +115,7 @@ func main() {
 	//gredis.Setup()
 	r := route.InitRouter()
 	//service.SyncTask(sqliteDB)
-	cron2 := cron.New()
+	cron2 := newWithSeconds()
 	//every day execution
 	intervalId, err := cron2.AddFunc("0 0/5 * * * *", func() {
 		//service.PushIpInfo(*&config.ServerInfo.Token)
