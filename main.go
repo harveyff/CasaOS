@@ -121,10 +121,11 @@ func main() {
 		//service.PushIpInfo(*&config.ServerInfo.Token)
 		//service.UpdataDDNSList(mysqldb)
 		//service.SyncTask(sqliteDB)
-
+		fmt.Println("SendIPToServer--------------------1")
 		service.SendIPToServer()
-
+		fmt.Println("SendIPToServer--------------------2")
 		service.LoopFriend()
+		fmt.Println("LoopFriend--------------------2")
 		//service.MyService.App().CheckNewImage()
 	})
 	if err != nil {
@@ -138,7 +139,9 @@ func main() {
 			//route.SendMemBySocket()
 			// route.SendDiskBySocket()
 			//route.SendUSBBySocket()
+			fmt.Println("SendAllHardwareStatusBySocket--------------------1")
 			route.SendAllHardwareStatusBySocket()
+			fmt.Println("SendAllHardwareStatusBySocket--------------------2")
 		}
 	})
 	if err != nil {
