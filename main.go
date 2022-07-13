@@ -15,7 +15,7 @@ import (
 	"github.com/IceWhaleTech/CasaOS/pkg/utils/random"
 	"github.com/IceWhaleTech/CasaOS/route"
 	"github.com/IceWhaleTech/CasaOS/service"
-	"github.com/robfig/cron/v3"
+	"github.com/robfig/cron"
 	"gorm.io/gorm"
 )
 
@@ -110,7 +110,7 @@ func main() {
 	//service.SyncTask(sqliteDB)
 	cron2 := cron.New()
 	//every day execution
-	cron2.AddFunc("0 0/5 * * * *", func() {
+	err := cron2.AddFunc("0 0/5 * * * *", func() {
 		//service.PushIpInfo(*&config.ServerInfo.Token)
 		//service.UpdataDDNSList(mysqldb)
 		//service.SyncTask(sqliteDB)
@@ -120,8 +120,10 @@ func main() {
 		service.LoopFriend()
 		//service.MyService.App().CheckNewImage()
 	})
-
-	cron2.AddFunc("0/5 * * * * *", func() {
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = cron2.AddFunc("0/5 * * * * *", func() {
 		if service.ClientCount > 0 {
 			//route.SendNetINfoBySocket()
 			//route.SendCPUBySocket()
@@ -131,7 +133,9 @@ func main() {
 			route.SendAllHardwareStatusBySocket()
 		}
 	})
-
+	if err != nil {
+		fmt.Println(err)
+	}
 	cron2.Start()
 	defer cron2.Stop()
 	s := &http.Server{
